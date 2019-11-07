@@ -21,12 +21,7 @@ set_fig_output <- function(group_name,fig_path=NULL) {
 get_gdrive_fig_path <- function(fig_path=NULL) {
   # find results/figure path.
   if (is.null(fig_path)) {
-    search_dirs <- c("./results/figure","../results/figure",".././results/figure")
-    fig_path <- search_dirs[dir.exists(file.path(search_dirs,"figure"))][1]
-    if (is.na(fig_path)) {
-      cat("Could not find figure path. Looked in:\n",search_dirs)
-      stop("exiting get_gdrive_fig_path.")
-    }
+    fig_path <- repo_find_fig_path()
   }
 
   # fing symlink to gdrive
