@@ -1,6 +1,7 @@
 # # figure_plotting.R
 
-t_manu <-  ggplot2::theme(line = ggplot2::element_line(size=1,color="black"),
+t_manu <-  function() {
+  t_manu <- ggplot2::theme(line = ggplot2::element_line(size=1,color="black"),
                  panel.background = ggplot2::element_rect(fill="white"),
                  panel.border = ggplot2::element_rect(fill=NA,colour="black",size=1),
                  panel.grid.major = ggplot2::element_blank(),
@@ -14,7 +15,9 @@ t_manu <-  ggplot2::theme(line = ggplot2::element_line(size=1,color="black"),
                  axis.ticks.length = ggplot2::unit(1,"mm"),
                  axis.title.x= ggplot2::element_text(size=10,colour="black"),
                  axis.title.y= ggplot2::element_text(size=10,angle=90,colour="black")
-)
+  )
+  return(t_manu)
+}
 
 t_pres <-  function(base_size = 20, base_line=1,base_family = "") {
   t_pres <- ggplot2::theme(line = ggplot2::element_line(size=base_line,color="black"),
@@ -72,21 +75,21 @@ gg_widths_equal <- function(gg_fig_list,idx_min_width) {
   }
 }
 
-# Used if LHS is larger than RHS
-extendToMatch <- function(source, destin) {
-  s <- length(source)
-  d <- length(destin)
-
-  # Assume that destin is a length when it is a single number and source is not
-  if(d==1 && s>1 && !is.null(as.numeric(destin)))
-    d <- destin
-
-  dif <- d - s
-  if (dif > 0) {
-    source <- rep(source, ceiling(d/s))[1:d]
-  }
-  return (source)
-}
+# # Used if LHS is larger than RHS
+# extendToMatch <- function(source, destin) {
+#   s <- length(source)
+#   d <- length(destin)
+#
+#   # Assume that destin is a length when it is a single number and source is not
+#   if(d==1 && s>1 && !is.null(as.numeric(destin)))
+#     d <- destin
+#
+#   dif <- d - s
+#   if (dif > 0) {
+#     source <- rep(source, ceiling(d/s))[1:d]
+#   }
+#   return (source)
+# }
 
 # Grouping the left hand side
 g = function(...) {
@@ -96,52 +99,21 @@ g = function(...) {
 }
 
 
-
-scalebar_geoms <- function(x_start,x_diff_m,y_start,y_diff,p4s_orig,p4s_utm,slabs) {
-  # plots a single black scalebar. p4s is proj4string character object
-  pts_CRS_orig <- SpatialPoints(matrix(c(x_start,y_start),ncol=2),proj4string = CRS(p4s_orig))
-  pts_CRS_utm <- spTransform(pts_CRS_orig,CRSobj = CRS(p4s_utm))
-  pts_CRS_utm_end <- pts_CRS_utm
-  pts_CRS_utm_end@coords[1,1] <- pts_CRS_utm@coords[1,1] + x_diff_m
-  x_end <- spTransform(pts_CRS_utm_end,CRSobj = CRS(p4s_orig))@coords[1,1]
-
-  scalebar_coords <- matrix(c(x_start,y_start,
-                              x_end,y_start,
-                              x_end,y_start+y_diff,
-                              x_start,y_start+y_diff,
-                              x_start,y_start),ncol=2,byrow=TRUE)
-
-  srl_1 <- Polygon(scalebar_coords,hole=FALSE)
-  Srl_1 <- Polygons(list(srl_1),1)
-  scalebar_poly <- SpatialPolygons(list(Srl_1),proj4string = CRS(p4s_orig))
-  scalebar_shape_geom <- geom_polygon(data=scalebar_poly,aes(x=long,y=lat))
-
-  text_df <- data.frame(lab=slabs,ref=0:(length(slabs)-1))
-  text_df$x <- text_df$ref * (x_end-x_start) + x_start
-  text_df$y <- y_start+y_diff*1.5
-  scalebar_text_geom <- geom_text(data=text_df,aes(x=x,y=y,label=lab,vjust=0)) #,position="center"
-  # p_stations_all + scalebar_shape_geom + scalebar_text_geom
-
-  return(list(scalebar_shape_geom,scalebar_text_geom))
-}
-
-
-locate_guide <- function(g){
+gg_locate_guide <- function(g){
   right <- max(g$layout$r)
   gg <- subset(g$layout, (grepl("guide", g$layout$name) & r == right - 1L) |
                  r == right)
   sort(gg$r)
 }
 
-compare_left <- function(g1, g2){
-
+gg_compare_left <- function(g1, g2){
   w1 <- g1$widths[1:3]
   w2 <- g2$widths[1:3]
   unit.pmax(w1, w2)
 }
 
 # from here: https://stackoverflow.com/questions/17736434/aligning-distinct-non-facet-plots-in-ggplot2-using-rpy2-in-python/17768224#17768224
-align_lr <- function(p1, p2){
+gg_align_lr <- function(p1, p2){
   g1 <- grob(p1)
   g2 <- grob(p2)
   # align the left side
