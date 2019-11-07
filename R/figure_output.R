@@ -6,7 +6,7 @@
 #' @examples
 #' output_dir_path <- set_fig_output("my_script_name")
 fig_set_output <- function(group_name,fig_path=NULL) {
-  gdrive_fig_path <- get_gdrive_fig_path(fig_path)
+  gdrive_fig_path <- fig_get_gdrive_path(fig_path)
   output_dir_path <- file.path(gdrive_fig_path,group_name)
   if (!dir.exists(output_dir_path)) {dir.create(output_dir_path)}
   return(output_dir_path)
