@@ -61,14 +61,15 @@ repo_create_gdrive_symlink <- function(link_path=NULL,gdrive_path) {
 }
 
 repo_find_fig_path <- function() {
-  search_dirs_1 <- c("./results/figure","../results/figure",".././results/figure")
+  search_dirs_1 <- c("./results/figure","../results/figure",".././results/figure","../../../results/figure")
   search_dirs_2 <- gsub("figure","fig",search_dirs_1)
   search_dirs_3 <- gsub("results","res",search_dirs_1)
   search_dirs <- c(search_dirs_1,search_dirs_2,search_dirs_3)
-  fig_path <- search_dirs[dir.exists(file.path(search_dirs,"figure"))][1]
+  fig_path <- search_dirs[dir.exists(search_dirs)][1]
   if (is.na(fig_path)) {
     cat("Could not find figure path. Looked in:\n",search_dirs)
     stop("exiting get_gdrive_fig_path.")
   }
+  return(fig_path)
 }
 
