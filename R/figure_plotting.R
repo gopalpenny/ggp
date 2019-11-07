@@ -40,18 +40,6 @@ t_pres <-  function(base_size = 20, base_line=1,base_family = "") {
   )
 }
 
-#' Get colors from colorspace
-#' Get set of colors for plotting
-#' param name The name that matches a corresponding color group. Must be
-#' one of the following:
-my_colors <- list(
-  count=colorspace::diverge_hcl(9,h=c(0,220),c = 80,l=c(40,90)),
-  vegetation=colorspace::heat_hcl(6,h=c(40,250),c = c(30,70),l=c(80,40)),
-  temperature=colorspace::heat_hcl(6,h=c(250,0),c = c(60,100),l=c(90,60)),
-  red_blue_diverging=colorspace::diverge_hcl(9,h=c(0,220),c = 80,l=c(40,90))
-)
-
-
 gg_widths_equal <- function(gg_fig_list,idx_min_width) {
   gg_grob_list <- list()
   gg_widths <- list()
