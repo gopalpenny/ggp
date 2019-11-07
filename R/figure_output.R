@@ -5,7 +5,7 @@
 #' Set, create, and output the Google drive output path
 #' @examples
 #' output_dir_path <- set_fig_output("my_script_name")
-set_fig_output <- function(group_name,fig_path=NULL) {
+fig_set_output <- function(group_name,fig_path=NULL) {
   gdrive_fig_path <- get_gdrive_fig_path(fig_path)
   output_dir_path <- file.path(gdrive_fig_path,group_name)
   if (!dir.exists(output_dir_path)) {dir.create(output_dir_path)}
@@ -18,7 +18,7 @@ set_fig_output <- function(group_name,fig_path=NULL) {
 #' @examples
 #' output_dir_path <- get_gdrive_fig_path()
 #' output_dir_path <- get_gdrive_fig_path(fig_path)
-get_gdrive_fig_path <- function(fig_path=NULL) {
+fig_get_gdrive_path <- function(fig_path=NULL) {
   # find results/figure path.
   if (is.null(fig_path)) {
     fig_path <- repo_find_fig_path()

@@ -7,7 +7,7 @@
 repo_setup_guide()
 }
 \description{
-Do the following to set up the repository:
+See examples to set up a new project repository:
 }
 \examples{
 # In terminal:
@@ -16,7 +16,7 @@ mkdir repo_name
 cd repo_name
 
 # In R
-setwd(path/to/new/repo)
+setwd("path/to/new/repo")
 repo_init()
 repo_create_gdrive_symlink(fig_path=NULL,gdrive_path="path/to/gdrive/project/directory")
 }
