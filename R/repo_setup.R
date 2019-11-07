@@ -73,3 +73,25 @@ repo_find_fig_path <- function() {
   return(fig_path)
 }
 
+#' Load local repository
+#'
+#' Load local package using \code{devtools::load_all()}. The repository should
+#' be located in ~/Projects/R_packages or in the
+#' @param repo_name Name of the package repository
+#' @param project_path Path to the directory in which the repo is contained. Also searches
+#' in the subdirectory \code{project_path/R_packages}.
+repo_load_local <- function(repo_name,project_path="~/Projects") {
+  projects_files <- list.files(project_path)
+  packages_path <- projects_files
+  search_dirs_1 <- file.path(c("~/Projects/R_packages",project_path),repo_name)
+  search_dirs <- c(search_dirs_1)
+  repo_path <- search_dirs[dir.exists(search_dirs)][1]
+  if (is.na(repo_path)) {
+    cat("Could not find repo path. Looked in:\n",search_dirs)
+    stop("exiting get_gdrive_fig_path.")
+  }
+
+  devtools::load_all(repo_path)
+
+  return(NULL)
+}
