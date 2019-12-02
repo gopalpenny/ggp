@@ -1,5 +1,7 @@
 # # figure_plotting.R
 
+#' Create theme for manuscripts
+#' @export
 t_manu <-  function() {
   t_manu <- ggplot2::theme(line = ggplot2::element_line(size=1,color="black"),
                  panel.background = ggplot2::element_rect(fill="white"),
@@ -19,6 +21,8 @@ t_manu <-  function() {
   return(t_manu)
 }
 
+#' Create theme for presentations
+#' @export
 t_pres <-  function(base_size = 20, base_line=1,base_family = "") {
   t_pres <- ggplot2::theme(line = ggplot2::element_line(size=base_line,color="black"),
                   panel.background = ggplot2::element_rect(fill="white"),
@@ -40,6 +44,8 @@ t_pres <-  function(base_size = 20, base_line=1,base_family = "") {
   )
 }
 
+#' Set grob width equal
+#' @export
 gg_widths_equal <- function(gg_fig_list,idx_min_width) {
   gg_grob_list <- list()
   gg_widths <- list()
@@ -53,11 +59,15 @@ gg_widths_equal <- function(gg_fig_list,idx_min_width) {
   return(gg_grob_list)
 }
 
-### from: http://stackoverflow.com/questions/7519790/assign-multiple-new-variables-in-a-single-line-in-r
-# Generic form
+
+#' Set equal to list
+#'
+#' Set equal to list. from: http://stackoverflow.com/questions/7519790/assign-multiple-new-variables-in-a-single-line-in-r
+#' @export
 '%=%' = function(l, r, ...) UseMethod('%=%')
 
-# Binary Operator
+#' Set equal to list
+#' @export
 '%=%.lbunch' = function(l, r, ...) {
   Envir = as.environment(-1)
 
@@ -74,30 +84,18 @@ gg_widths_equal <- function(gg_fig_list,idx_min_width) {
   }
 }
 
-# # Used if LHS is larger than RHS
-# extendToMatch <- function(source, destin) {
-#   s <- length(source)
-#   d <- length(destin)
-#
-#   # Assume that destin is a length when it is a single number and source is not
-#   if(d==1 && s>1 && !is.null(as.numeric(destin)))
-#     d <- destin
-#
-#   dif <- d - s
-#   if (dif > 0) {
-#     source <- rep(source, ceiling(d/s))[1:d]
-#   }
-#   return (source)
-# }
-
-# Grouping the left hand side
+#' Grouping the left hand side
+#'
+#' Grouping the lefthand side
+#' @export
 g = function(...) {
   List = as.list(substitute(list(...)))[-1L]
   class(List) = 'lbunch'
   return(List)
 }
 
-
+#' Locate guide in ggplot
+#' @export
 gg_locate_guide <- function(g){
   right <- max(g$layout$r)
   gg <- subset(g$layout, (grepl("guide", g$layout$name) & r == right - 1L) |
@@ -111,7 +109,10 @@ gg_compare_left <- function(g1, g2){
   unit.pmax(w1, w2)
 }
 
-# from here: https://stackoverflow.com/questions/17736434/aligning-distinct-non-facet-plots-in-ggplot2-using-rpy2-in-python/17768224#17768224
+#' GG align left and right
+#' @export
+#' @return from here: https://stackoverflow.com/questions/17736434/aligning-distinct-non-facet-plots-in-ggplot2-using-rpy2-in-python/17768224#17768224
+#' @return from here: https://stackoverflow.com/questions/17736434/aligning-distinct-non-facet-plots-in-ggplot2-using-rpy2-in-python/17768224#17768224
 gg_align_lr <- function(p1, p2){
   g1 <- grob(p1)
   g2 <- grob(p2)

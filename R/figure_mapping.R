@@ -1,6 +1,10 @@
 # figure_mapping.R
 
 
+#' Add scalebar to a gglpot
+#'
+#' Add scalebar to a gglpot // deprecated. Use ggspatial
+#' @export
 scalebar_geoms <- function(x_start,x_diff_m,y_start,y_diff,p4s_orig,p4s_utm,slabs) {
   # plots a single black scalebar. p4s is proj4string character object
   pts_CRS_orig <- SpatialPoints(matrix(c(x_start,y_start),ncol=2),proj4string = CRS(p4s_orig))

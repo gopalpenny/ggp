@@ -3,6 +3,7 @@
 #' Project repo setup guide
 #'
 #' See examples to set up a new project repository:
+#' @export
 #' @examples
 #' # In terminal:
 #' cd path/to/superdirectory
@@ -21,6 +22,7 @@ repo_setup_guide <- function() {
 #'
 #' Create a project repository with GP standard structure. Should be done INSIDE
 #' the dirctory that will house the repository.
+#' @export
 #' @examples
 #' setwd("path/to/repo")
 #' repo_init()
@@ -49,17 +51,24 @@ repo_init <- function(path) {
 }
 
 #' Create symbolic link to gdrive
+#'
+#' Create symbolic link to gdrive
+#' @export
+#' @examples
+#' repo_create_gdrive_symlink(gdrive_path="~/Google Drive/my_project/fig")
 repo_create_gdrive_symlink <- function(link_path=NULL,gdrive_path) {
   if (is.null(link_path)) {
+    a <- Sys.info()
     fig_path <- repo_find_fig_path()
     symlink_name <- paste0("gdrive",gsub("\\.local","",a['nodename']))
     symlink_path <- file.path(fig_path,symlink_name)
   }
-  creatLink(symlink_path,gdrive_path)
+  R.utils::createLink(symlink_path,gdrive_path)
   cat(symlink_path,"->",gdrive_path,"|| symlink created.\n")
   return(NULL)
 }
 
+#' Find fig path in repo
 repo_find_fig_path <- function() {
   search_dirs_1 <- c("./results/figure","../results/figure","../../results/figure","../../../results/figure")
   search_dirs_2 <- gsub("figure","fig",search_dirs_1)

@@ -9,3 +9,6 @@ repo_create_gdrive_symlink(link_path = NULL, gdrive_path)
 \description{
 Create symbolic link to gdrive
 }
+\examples{
+repo_create_gdrive_symlink(gdrive_path="~/Google Drive/my_project/fig")
+}

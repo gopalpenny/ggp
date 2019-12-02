@@ -3,6 +3,7 @@
 #' Set file output path
 #'
 #' Set, create, and output the Google drive output path
+#' @export
 #' @examples
 #' output_dir_path <- set_fig_output("my_script_name")
 fig_set_output <- function(group_name,fig_path=NULL) {
@@ -15,6 +16,7 @@ fig_set_output <- function(group_name,fig_path=NULL) {
 #' Get Google Drive output path
 #'
 #' Search for Google Drive symlink in results/figure, and return relative symlink path
+#' @export
 #' @examples
 #' output_dir_path <- get_gdrive_fig_path()
 #' output_dir_path <- get_gdrive_fig_path(fig_path)
