@@ -23,3 +23,20 @@ bound_vec <- function(x,bounds) {
   x[x > bounds[2]] <- bounds[2]
   return(x)
 }
+
+
+#' Print data frame for re-entry
+#' @export
+#' @examples
+#' df <- data.frame(a=1:4,b=11:14,c=c("a","b","c","q"))
+#' print_data_frame_for_entry(df)
+print_data_frame_for_entry <- function(df) {
+  df_names <- names(df)
+  N <- length(df_names)
+  cat("df <- data.frame(")
+  for (i in 1:N) {
+    char_end <- ifelse(i!=N,",",")")
+    cat(paste0(df_names[i],"=",paste(df[,i],collapse=","),"",char_end,"\n"))
+  }
+
+}
