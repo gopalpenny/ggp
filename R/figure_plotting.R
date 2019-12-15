@@ -8,15 +8,16 @@ t_manu <-  function() {
                  panel.border = ggplot2::element_rect(fill=NA,colour="black",size=1),
                  panel.grid.major = ggplot2::element_blank(),
                  panel.grid.minor = ggplot2::element_blank(),
-                 # panel.grid.major.y = ggplot2::element_line(color="gray",size=1),
-                 axis.line = ggplot2::element_blank(),#(colour = "black",size=1),
-                 axis.text.x = ggplot2::element_text(size=10,colour="black"),
-                 axis.text.y = ggplot2::element_text(size=10,colour="black",hjust=1),
+                 axis.line = ggplot2::element_blank(),
                  axis.ticks.x =  ggplot2::element_line(colour = "black",size=0.5),
                  axis.ticks.y =  ggplot2::element_line(colour = "black",size=0.5),
                  axis.ticks.length = ggplot2::unit(1,"mm"),
+                 axis.text.x = ggplot2::element_text(size=9,colour="black"),
+                 axis.text.y = ggplot2::element_text(size=9,colour="black",hjust=1),
+                 legend.text=element_text(size=9,color="black"),
                  axis.title.x= ggplot2::element_text(size=10,colour="black"),
-                 axis.title.y= ggplot2::element_text(size=10,angle=90,colour="black")
+                 axis.title.y= ggplot2::element_text(size=10,angle=90,colour="black"),
+                 legend.title=element_text(size=10,color="black")
   )
   return(t_manu)
 }

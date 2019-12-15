@@ -11,5 +11,18 @@ Print data frame for re-entry
 }
 \examples{
 df <- data.frame(a=1:4,b=11:14,c=c("a","b","c","q"))
-print_data_frame_for_entry(df)
+ggp::print_data_frame_for_entry(df)
+bounds <-data.frame(bID=c(5, 6, 7, 8),
+                    x1=c(468888, 572670, 483978, 468888),
+                    x2=c(572670, 588746, 588746, 483978),
+                    y1=c(4592114, 4630407, 4518117, 4592114),
+                    y2=c(4630407, 4556624, 4556624, 4518117))
+bounds \%>\% ggp::print_data_frame_for_entry()
+df <- data.frame(bID=c(c(5, 6, 7, 8)),
+                 x1=c(c(-87.44, -86.18, -85.88, -87.13)),
+                 y1=c(c(41.46, 41.81, 41.17, 40.83)),
+                 x2=c(c(-86.18, -85.88, -87.13, -87.44)),
+                 y2=c(c(41.81, 41.17, 40.83, 41.46)),
+                 bound_type=c(c(1, 1, 1, 1)))
+df \%>\% print_data_frame_for_entry()
 }
