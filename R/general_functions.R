@@ -30,11 +30,12 @@ bound_vec <- function(x,bounds) {
 #' @examples
 #' df <- data.frame(a=1:4,b=11:14,c=c("a","b","c","q"))
 #' ggp::print_data_frame_for_entry(df)
-#' bounds <-data.frame(bID=c(5, 6, 7, 8),
+#' bounds <- data.frame(bID=c(5, 6, 7, 8),
 #'                     x1=c(468888, 572670, 483978, 468888),
 #'                     x2=c(572670, 588746, 588746, 483978),
 #'                     y1=c(4592114, 4630407, 4518117, 4592114),
-#'                     y2=c(4630407, 4556624, 4556624, 4518117))
+#'                     y2=c(4630407, 4556624, 4556624, 4518117),
+#'                     v=c("foo","bar","oof","rab"))
 #' bounds %>% ggp::print_data_frame_for_entry()
 #' df <- data.frame(bID=c(c(5, 6, 7, 8)),
 #'                  x1=c(c(-87.44, -86.18, -85.88, -87.13)),
@@ -43,13 +44,17 @@ bound_vec <- function(x,bounds) {
 #'                  y2=c(c(41.81, 41.17, 40.83, 41.46)),
 #'                  bound_type=c(c(1, 1, 1, 1)))
 #' df %>% print_data_frame_for_entry()
-print_data_frame_for_entry <- function(df) {
+print_data_frame_for_entry <- function(df, strings_as_factors = FALSE) {
   df_names <- names(df)
   N <- length(df_names)
+  df <- tibble::as_tibble(df)
   cat("df <- data.frame(")
+  if (!strings_as_factors) {
+    df <- df %>% dplyr::mutate_if(is.factor,as.character)
+  }
   for (i in 1:N) {
     char_end <- ifelse(i!=N,",",")")
-    df_line <- paste0(df_names[i],"=c(",paste(df[,i],collapse=","),")",char_end,"\n")
+    df_line <- paste0(df_names[i],"=",paste(df[,i],collapse=","),"",char_end,"\n")
     df_line_print <- gsub(paste0("))",char_end,"\\\n"),paste0(")",char_end,"\\\n"),gsub("=.*c\\(","=c\\(","a=c(c(1,2,3)))\n"))
     cat(df_line)
   }
