@@ -30,7 +30,9 @@ bound_vec <- function(x,bounds) {
 #' @examples
 #' df <- data.frame(a=1:4,b=11:14,c=c("a","b","c","q"))
 #' ggp::print_data_frame_for_entry(df)
-#' bounds <- data.frame(bID=c(5, 6, 7, 8),
+#' df <- data.frame(a=1,b=14,c=c("a"))
+#' ggp::print_data_frame_for_entry(df)
+#' bounds <- tibble::tibble(bID=c(5, 6, 7, 8),
 #'                     x1=c(468888, 572670, 483978, 468888),
 #'                     x2=c(572670, 588746, 588746, 483978),
 #'                     y1=c(4592114, 4630407, 4518117, 4592114),
@@ -52,9 +54,12 @@ print_data_frame_for_entry <- function(df, strings_as_factors = FALSE) {
   if (!strings_as_factors) {
     df <- df %>% dplyr::mutate_if(is.factor,as.character)
   }
+  if (nrow(df)==1) {
+    df <- df %>% dplyr::mutate_if(is.character,function(x) paste0("\"",x,"\""))
+  }
   for (i in 1:N) {
-    char_end <- ifelse(i!=N,",",")")
-    df_line <- paste0(df_names[i],"=",paste(df[,i],collapse=","),"",char_end,"\n")
+    char_end <- ifelse(i!=N,",",")") # end of line character
+    df_line <- paste0(df_names[i],"=",paste(df[,i],collapse=","),"",char_end,"\n") #
     df_line_print <- gsub(paste0("))",char_end,"\\\n"),paste0(")",char_end,"\\\n"),gsub("=.*c\\(","=c\\(","a=c(c(1,2,3)))\n"))
     cat(df_line)
   }
