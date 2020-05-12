@@ -2,6 +2,7 @@
 
 S3method("%=%",lbunch)
 export("%=%")
+export(akima_bilinear)
 export(bound_vec)
 export(fig_get_gdrive_path)
 export(fig_set_output)

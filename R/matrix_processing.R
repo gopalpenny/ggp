@@ -6,6 +6,7 @@
 #' @param df data.frame containing gridded x, y locations and z values
 #' @param out_dim vector containing \code{c(nx, ny)} as number of x and y output locations
 #' @importFrom dplyr %>%
+#' @export
 #' @details
 #' The data.frame df must contain columns for x, y, and z. The x and y
 #' values must be on a grid.

@@ -22,9 +22,10 @@ Interpolation is done using \code{akima::bilinear}
 }
 \examples{
 library(ggplot2)
+library(ggp)
 df <- expand.grid(x=1:5,y=1:5)
-df$z <- df$x^2 + df$y
-df2 <- akima_bilinear(df, c(100,100))
+df$z <- df$x^2 + df$y^2
+df_out <- akima_bilinear(df, c(100,100))
 ggplot(df) + geom_raster(aes(x,y,fill=z)) + coord_equal()
-ggplot(df2) + geom_raster(aes(x,y,fill=z)) + coord_equal()
+ggplot(df_out) + geom_raster(aes(x,y,fill=z)) + coord_equal()
 }
