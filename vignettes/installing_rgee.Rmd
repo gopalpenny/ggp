@@ -1,0 +1,129 @@
+---
+title: "installing_rgee"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{installing_rgee}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Steps I took to install `rgee`
+
+This is a summary of the steps I took to install `rgee` on my machine. A couple things need to be done before installing `rgee`:
+
+* Install conda
+* Set up reticulate in R
+* Ensure python version is >= 3.5
+* Install earthengine-api package to python environment
+* Install and initialize rgee
+
+Keep in mind that using Earth Engine still requires you to to have permission from Google. 
+
+### Install conda
+
+Search Google for help here. The benefit of conda is that it can manage multiple python environments on the same machine. Essentially, you can access or activate environments depending on your needs (or that of the software you are using).
+
+### Set up reticulate in R
+
+With conda on my machine, I installed the `reticulate` package for R, which allows R to interface with python packages. This is how `rgee` is able to communicate with the Earth Engine API -- it uses the `reticulate` package in R alongside the `earthengine-api` package in python.
+
+```{r eval=FALSE}
+install.packages("reticulate")
+```
+
+On my machine, I have a conda python environment called `r-reticulate`. So, when I load `reticulate` in R, I make sure it accesses the appropriate python environment as
+
+```{r eval=FALSE}
+library(reticulate)
+use_condaenv("r-reticulate")
+```
+
+### Ensure python version is >= 3.5
+
+The `rgee` requires you have python version ≥ 3.5. I can check to make sure on my machine by first looking at the conda environments I have installed using `conda env list` from terminal, or in R as:
+
+```{r eval=FALSE}
+system("conda env list")
+```
+
+And then specifically checking the python version using `conda activate r-reticulate` *from the terminal*:
+
+```
+conda activate r-reticulate
+conda info
+
+     active environment : r-reticulate
+    active env location : /Users/gopal/opt/anaconda3/envs/r-reticulate
+            shell level : 1
+       user config file : /Users/gopal/.condarc
+ populated config files : /Users/gopal/.condarc
+          conda version : 4.8.5
+    conda-build version : 3.18.9
+         python version : 3.7.4.final.0
+       virtual packages : __osx=10.14.6
+       base environment : /Users/gopal/opt/anaconda3  (writable)
+           channel URLs : https://repo.anaconda.com/pkgs/main/osx-64
+                          https://repo.anaconda.com/pkgs/main/noarch
+                          https://repo.anaconda.com/pkgs/r/osx-64
+                          https://repo.anaconda.com/pkgs/r/noarch
+          package cache : /Users/gopal/opt/anaconda3/pkgs
+                          /Users/gopal/.conda/pkgs
+       envs directories : /Users/gopal/opt/anaconda3/envs
+                          /Users/gopal/.conda/envs
+               platform : osx-64
+             user-agent : conda/4.8.5 requests/2.22.0 CPython/3.7.4 Darwin/18.7.0 OSX/10.14.6
+                UID:GID : 501:20
+             netrc file : None
+           offline mode : False
+```
+
+Then to close the environment, run
+
+```
+conda deactivate
+```
+
+### Install earthengine-api package to python environment
+
+Next, make sure that the earthengine-api package is installed in the appropriate python environment. For example, run in the terminal:
+
+```
+conda activate r-reticulate
+conda install -c conda-forge earthengine-api
+conda deactivate
+```
+
+### Install and initialize rgee
+
+Now you are ready to install `rgee`  as follows in R:
+
+```{r eval=FALSE}
+library(reticulate)
+use_condaenv("r-reticulate")
+
+install.packages("rgee")
+library(rgee)
+
+ee_install() # install rgee -- only need to run once!
+ee_check() # check to make sure it installed properly
+ee_Initialize() # initialize for the first time
+```
+
+And whenever you need to use `rgee`, call it as:
+
+```{r eval=FALSE}
+library(reticulate)
+use_condaenv("r-reticulate")
+library(rgee)
+ee_Initialize()
+```
+
+## Final notes
+
+Definitely check out the support for rgee on [github.com/r-spatial/rgee](https://github.com/r-spatial/rgee)! It has additional installation support and useful code examples.
