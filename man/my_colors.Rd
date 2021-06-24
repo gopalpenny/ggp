@@ -7,7 +7,9 @@
 Get set of colors for plotting
 param name The name that matches a corresponding color group. Must be
 one of the following:}
-\format{An object of class \code{list} of length 4.}
+\format{
+An object of class \code{list} of length 4.
+}
 \usage{
 my_colors
 }

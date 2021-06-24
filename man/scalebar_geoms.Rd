@@ -4,8 +4,7 @@
 \alias{scalebar_geoms}
 \title{Add scalebar to a gglpot}
 \usage{
-scalebar_geoms(x_start, x_diff_m, y_start, y_diff, p4s_orig, p4s_utm,
-  slabs)
+scalebar_geoms(x_start, x_diff_m, y_start, y_diff, p4s_orig, p4s_utm, slabs)
 }
 \description{
 Add scalebar to a gglpot // deprecated. Use ggspatial

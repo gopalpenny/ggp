@@ -1,0 +1,226 @@
+---
+title: "rgee Workshop"
+author: "Gopal Penny"
+date: "10/25/2020"
+output: 
+  html_document:
+    toc: true
+    number_sections: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# `rgee` Workshop
+
+The examples and most of the code below are from [https://github.com/r-spatial/rgee](https://github.com/r-spatial/rgee).
+
+To begin we'll load `reticulate`, set our python environment, and load and initialize `rgee`.
+
+```{r cars}
+library(reticulate)
+use_condaenv("r-reticulate")
+library(rgee)
+
+## It is necessary just once
+# ee_install()
+
+# Initialize Earth Engine!
+ee_Initialize(email = "gopalpenny@gmail.com", drive=TRUE)
+
+ee_check() # Check non-R dependencies
+```
+
+## Example 1: Night time lights trend
+
+```{r}
+# Function to create an image band that stores time
+createTimeBand <-function(img) {
+  year <- ee$Date(img$get('system:time_start'))$get('year')$subtract(1991L)
+  ee$Image(year)$byte()$addBands(img)
+}
+
+# Load Night time lights image collection
+collection <- ee$
+  ImageCollection('NOAA/DMSP-OLS/NIGHTTIME_LIGHTS')$
+  select('stable_lights')$
+  map(createTimeBand) # this map command adds the time band to each image within the collection
+```
+
+Now, calculate a linear trend in each pixel
+
+```{r}
+# Calculate the trend using a Reducer, which collapses multiple images to a single image
+col_reduce <- collection$reduce(ee$Reducer$linearFit())
+col_reduce <- col_reduce$addBands(
+  col_reduce$select('scale')) # scale is the slope of the trend
+
+# Print metadata for the resulting image
+ee_print(col_reduce)
+```
+
+Map the trend
+
+```{r}
+# Map the temporal trend. Green -- no trend. Red band -- increase, Blue band - decrease
+Map$setCenter(9.08203, 47.39835, 3)
+m1 <- Map$addLayer(
+  eeObject = col_reduce,
+  visParams = list(
+    bands = c("scale", "offset", "scale"),
+    min = 0,
+    max = c(0.18, 20, -0.18)
+  ),
+  name = "stable lights trend"
+)
+m2 <- Map$addLayer(
+  eeObject = col_reduce,
+  visParams = list(
+    bands = c("scale", "offset", "scale"),
+    min = 0,
+    max = c(0.18, 20, -0.18)
+  ),
+  name = "stable lights trend"
+)
+
+m1 + m2
+```
+
+
+## Example 2: Extract precipitation values
+
+Load `tidyverse` for easy data wrangling and `sf` for spatial (i.e., vector) processing.
+
+```{r}
+library(tidyverse)
+library(sf)
+
+nc <- st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+# nc
+ggplot() + geom_sf(data=nc,aes())
+```
+
+Define the image collection containing monthly precipitation values. Note that we filter the data to the year 2001.
+
+```{r}
+terraclimate <- ee$ImageCollection("IDAHO_EPSCOR/TERRACLIMATE")$
+  filterDate("2001-01-01", "2002-01-01")$
+  map(function(x) x$reproject("EPSG:4326")$select("pr"))
+```
+
+Extract and map precipitation values
+
+```{r}
+# Extract precip from earth engine
+ee_nc_rain <- ee_extract(x = terraclimate, y = nc, sf = FALSE)
+colnames(ee_nc_rain) <- paste0("month_",sprintf("%02d", 1:12))
+nc_rain <- nc %>% bind_cols(ee_nc_rain)
+
+# Convert vector to "long" format -- i.e., 1 row per county-month combination
+nc_rain_long <- nc_rain %>% gather("month","pr",starts_with("month_"))
+
+# Use ggplot with geom_sf for spatial maps, and use facet_wrap to include a panel for each month
+ggplot() + geom_sf(data=nc_rain_long,aes(fill=pr)) + facet_wrap(~month,ncol = 3)
+```
+
+Plot the same data as a timeseries
+
+```{r}
+ggplot(nc_rain_long, aes(x = month, y = pr, group = NAME, color = pr)) +
+  geom_line(alpha = 0.4) +
+  xlab("Month") +
+  ylab("Precipitation (mm)") +
+  theme_minimal()
+```
+
+## Example 3: Create an NDVI-animation
+
+Javascript version: https://developers.google.com/earth-engine/tutorials/community/modis-ndvi-time-series-animation
+
+```{r}
+# Define the regional bounds of animation frames and a mask to clip the NDVI data by.
+mask <- system.file("shp/arequipa.shp", package = "rgee") %>% 
+  st_read(quiet = TRUE) %>% 
+  sf_as_ee()
+region <- mask$geometry()$bounds()
+
+# Retrieve the MODIS Terra Vegetation Indices 16-Day Global 1km dataset as an ee.ImageCollection and select the NDVI band.
+col <- ee$ImageCollection('MODIS/006/MOD13A2')$select('NDVI')
+
+ee_print(mask)
+
+# Group images by composite date
+col <- col$map(function(img) {
+  doy <- ee$Date(img$get('system:time_start'))$getRelative('day', 'year')
+  img$set('doy', doy)
+})
+distinctDOY <- col$filterDate('2013-01-01', '2014-01-01')
+```
+
+
+
+
+```{r}
+filter <- ee$Filter$equals(leftField = 'doy', rightField = 'doy');
+
+# Define a join; convert the resulting FeatureCollection to an ImageCollection.
+
+join <- ee$Join$saveAll('doy_matches')
+joinCol <- ee$ImageCollection(join$apply(distinctDOY, col, filter))
+
+comp <- joinCol$map(function(img) {
+  doyCol = ee$ImageCollection$fromImages(
+    img$get('doy_matches')
+  )
+  doyCol$reduce(ee$Reducer$median())
+})
+```
+
+
+```{r}
+# Create the visualization
+visParams = list(
+  min = 0.0,
+  max = 9000.0,
+  bands = "NDVI_median",
+  palette = c(
+    'FFFFFF', 'CE7E45', 'DF923D', 'F1B555', 'FCD163', '99B718', '74A901',
+    '66A000', '529400', '3E8601', '207401', '056201', '004C00', '023B01',
+    '012E01', '011D01', '011301'
+    )
+)
+
+rgbVis <- comp$map(function(img) {
+  do.call(img$visualize, visParams) %>% 
+    ee$Image$clip(mask)
+})
+```
+
+
+```{r}
+# Create the GIF
+gifParams <- list(
+  region = region,
+  dimensions = 600,
+  crs = 'EPSG:3857',
+  framesPerSecond = 10
+)
+
+
+print(rgbVis$getVideoThumbURL(gifParams))
+```
+
+The GIF image is located at the URL given above. The following command automatically navigates your web browser to this URL.
+
+```{r}
+browseURL(rgbVis$getVideoThumbURL(gifParams))
+```
+
+## Final thoughts
+
+The `rgee` package is fantastic for simple data retrieval. In my experience, it has a few drawbacks compared with the native GEE javascript portal:
+
+* Less interactive -- for example, GEE portal allows you to query raster pixels in the map. 
+* `rgee` commands hold your R session hostage -- GEE doesn't process in the background
+* Difficulties interrupting GEE -- may have to force quit R / RStudio

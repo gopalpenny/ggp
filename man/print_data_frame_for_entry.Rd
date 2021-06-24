@@ -4,8 +4,7 @@
 \alias{print_data_frame_for_entry}
 \title{Print data frame for re-entry}
 \usage{
-print_data_frame_for_entry(df, strings_as_factors = FALSE,
-  single_line = FALSE)
+print_data_frame_for_entry(df, strings_as_factors = FALSE, single_line = FALSE)
 }
 \description{
 Print data frame for re-entry

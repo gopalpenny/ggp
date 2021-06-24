@@ -9,11 +9,13 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Suggests: 
     testthat,
     akima,
     dplyr,
     knitr,
     rmarkdown
+Imports:
+    R.utils
 VignetteBuilder: knitr
