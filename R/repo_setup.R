@@ -62,6 +62,8 @@ repo_create_gdrive_symlink <- function(link_path=NULL,gdrive_path) {
     fig_path <- repo_find_fig_path()
     symlink_name <- paste0("gdrive",gsub("\\.local","",a['nodename']))
     symlink_path <- file.path(fig_path,symlink_name)
+  } else {
+    symlink_path <- link_path
   }
   R.utils::createLink(symlink_path,gdrive_path)
   cat(symlink_path,"->",gdrive_path,"|| symlink created.\n")
