@@ -12,7 +12,7 @@ Print data frame for re-entry
 \examples{
 df <- data.frame(a=1:4,b=11:14,c=c("a","b","c","q"))
 ggp::print_data_frame_for_entry(df)
-ggp::print_data_frame_for_entry(df,single_line=T)
+ggp::print_data_frame_for_entry(df,single_line=TRUE)
 df <- data.frame(a=1,b=14,c=c("a"))
 ggp::print_data_frame_for_entry(df)
 bounds <- tibble::tibble(bID=c(5, 6, 7, 8),

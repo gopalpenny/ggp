@@ -11,6 +11,8 @@ Create a project repository with GP standard structure. Should be done INSIDE
 the dirctory that will house the repository.
 }
 \examples{
+\dontrun{
 setwd("path/to/repo")
 repo_init()
+}
 }

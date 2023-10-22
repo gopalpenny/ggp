@@ -5,6 +5,7 @@
 #' See examples to set up a new project repository:
 #' @export
 #' @examples
+#' \dontrun{
 #' # In terminal:
 #' cd path/to/superdirectory
 #' mkdir repo_name
@@ -14,6 +15,7 @@
 #' setwd("path/to/new/repo")
 #' repo_init()
 #' repo_create_gdrive_symlink(fig_path=NULL,gdrive_path="path/to/gdrive/project/directory")
+#' }
 repo_setup_guide <- function() {
   return(NULL)
 }
@@ -24,8 +26,10 @@ repo_setup_guide <- function() {
 #' the dirctory that will house the repository.
 #' @export
 #' @examples
+#' \dontrun{
 #' setwd("path/to/repo")
 #' repo_init()
+#' }
 repo_init <- function(path) {
   repo_structure <- c("data",
                       "data/orig",
@@ -55,7 +59,9 @@ repo_init <- function(path) {
 #' Create symbolic link to gdrive
 #' @export
 #' @examples
+#' \dontrun{
 #' repo_create_gdrive_symlink(gdrive_path="~/Google Drive/my_project/fig")
+#' }
 repo_create_gdrive_symlink <- function(link_path=NULL,gdrive_path) {
   if (is.null(link_path)) {
     a <- Sys.info()

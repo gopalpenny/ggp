@@ -16,10 +16,13 @@ fig_set_output <- function(group_name,fig_path=NULL) {
 #' Get Google Drive output path
 #'
 #' Search for Google Drive symlink in results/figure, and return relative symlink path
+#' @param fig_path Path to figures directory -- if NULL, function will search repo for it
 #' @export
 #' @examples
+#' \dontrun{
 #' output_dir_path <- fig_get_gdrive_path()
 #' output_dir_path <- fig_get_gdrive_path(fig_path)
+#' }
 fig_get_gdrive_path <- function(fig_path=NULL) {
   # find results/figure path.
   if (is.null(fig_path)) {

@@ -6,10 +6,15 @@
 \usage{
 fig_get_gdrive_path(fig_path = NULL)
 }
+\arguments{
+\item{fig_path}{Path to figures directory -- if NULL, function will search repo for it}
+}
 \description{
 Search for Google Drive symlink in results/figure, and return relative symlink path
 }
 \examples{
-output_dir_path <- get_gdrive_fig_path()
-output_dir_path <- get_gdrive_fig_path(fig_path)
+\dontrun{
+output_dir_path <- fig_get_gdrive_path()
+output_dir_path <- fig_get_gdrive_path(fig_path)
+}
 }

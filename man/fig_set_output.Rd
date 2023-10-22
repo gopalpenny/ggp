@@ -10,5 +10,5 @@ fig_set_output(group_name, fig_path = NULL)
 Set, create, and output the Google drive output path
 }
 \examples{
-output_dir_path <- set_fig_output("my_script_name")
+output_dir_path <- fig_set_output("my_script_name")
 }

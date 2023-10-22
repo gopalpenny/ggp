@@ -10,6 +10,7 @@ repo_setup_guide()
 See examples to set up a new project repository:
 }
 \examples{
+\dontrun{
 # In terminal:
 cd path/to/superdirectory
 mkdir repo_name
@@ -19,4 +20,5 @@ cd repo_name
 setwd("path/to/new/repo")
 repo_init()
 repo_create_gdrive_symlink(fig_path=NULL,gdrive_path="path/to/gdrive/project/directory")
+}
 }

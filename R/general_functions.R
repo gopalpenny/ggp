@@ -30,7 +30,7 @@ bound_vec <- function(x,bounds) {
 #' @examples
 #' df <- data.frame(a=1:4,b=11:14,c=c("a","b","c","q"))
 #' ggp::print_data_frame_for_entry(df)
-#' ggp::print_data_frame_for_entry(df,single_line=T)
+#' ggp::print_data_frame_for_entry(df,single_line=TRUE)
 #' df <- data.frame(a=1,b=14,c=c("a"))
 #' ggp::print_data_frame_for_entry(df)
 #' bounds <- tibble::tibble(bID=c(5, 6, 7, 8),
@@ -76,7 +76,7 @@ print_data_frame_for_entry <- function(df, strings_as_factors = FALSE, single_li
 
 
 #' Convert Crore INR (Rs) to USD (\$)
-#' 
+#'
 #' Convert crore to USD. 1 crore = 1 x 10^7
 #' @param crore Amount of rupees in crore
 #' @param rs_per_usd Conversion rate: rupees per dollar
@@ -88,4 +88,11 @@ crore_to_usd <- function(crore, rs_per_usd = 70) {
   usd <- rs/rs_per_usd
   return(usd)
 }
+
+#' reinstall_github_ggp
+reinstall_github_ggp <- function() {
+  devtools::install_github("https://github.com/gopalpenny/ggp")
+  return(NULL)
+}
+
 
