@@ -72,3 +72,20 @@ print_data_frame_for_entry <- function(df, strings_as_factors = FALSE, single_li
     # }
   }
 }
+
+
+
+#' Convert Crore INR (Rs) to USD (\$)
+#' 
+#' Convert crore to USD. 1 crore = 1 x 10^7
+#' @param crore Amount of rupees in crore
+#' @param rs_per_usd Conversion rate: rupees per dollar
+#' @export
+#' @examples
+#' crore_to_usd(70,70) # 70 crore Rs is $10M (1e7) with exchange rate of 70 Rs = 1 USD
+crore_to_usd <- function(crore, rs_per_usd = 70) {
+  rs <- crore * 1e7 # 1 crore Rs = 1 x 10^7 Rs
+  usd <- rs/rs_per_usd
+  return(usd)
+}
+
